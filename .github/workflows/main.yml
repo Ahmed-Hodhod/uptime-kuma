@@ -1,0 +1,35 @@
+name: Frontend Build and Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Run a dummy command
+      run: echo "Dummy Docker Image Build & Push Command"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH into server and pull latest Docker image
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SERVER_SSH_PORT }}
+        script: |
+          docker pull louislam/uptime-kuma:1
+          docker stop uptime-kuma || true
+          docker rm uptime-kuma || true
+          docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1
