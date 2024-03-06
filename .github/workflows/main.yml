@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  # Update to v3 to use Node.js 20
 
     - name: Run a dummy command
       run: echo "Dummy Docker Image Build & Push Command"
