@@ -1,9 +1,9 @@
-name: CI/CD
+name: Frontend Build and Deployment
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
